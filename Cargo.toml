@@ -1,0 +1,32 @@
+[package]
+name = "proof_seeder"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0 OR MIT"
+description = "Sign EIP-8025 execution proofs and submit them to a beacon node"
+
+[dependencies]
+axum = "0.8"
+clap = { version = "4.5", features = ["derive"] }
+hex = "0.4"
+sensitive_url = { version = "0.1", features = ["serde"] }
+serde = { version = "1", features = ["derive"] }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "time"] }
+tree_hash = { git = "https://github.com/sigp/tree_hash", rev = "e5ea1875edddf12438506c3751cbb313f9c52d08" }
+
+# The containers, the signing domain and the beacon node client come from Lighthouse, so a proof
+# this signs hashes exactly as the node that verifies it expects. Pinned, not tracking a branch.
+bls = { git = "https://github.com/dapplion/lighthouse", rev = "a88ae8eb11d38c1653c3f6e433400f5fbde5bb52" }
+eth2 = { git = "https://github.com/dapplion/lighthouse", rev = "a88ae8eb11d38c1653c3f6e433400f5fbde5bb52" }
+eth2_keystore = { git = "https://github.com/dapplion/lighthouse", rev = "a88ae8eb11d38c1653c3f6e433400f5fbde5bb52" }
+types = { git = "https://github.com/dapplion/lighthouse", rev = "a88ae8eb11d38c1653c3f6e433400f5fbde5bb52" }
+
+# Lighthouse builds against forks of these, and a patch does not reach a consumer, so it is
+# repeated here. Drop it when those crates are published.
+[patch.crates-io]
+ssz_types = { git = "https://github.com/sigp/ssz_types", rev = "8955d22edc7633f26fe3b5ac933facb5121d717a" }
+milhouse = { git = "https://github.com/sigp/milhouse", rev = "d67aabd2a7c405b3c16f4aaff159b137dc5b5e38" }
+ethereum_ssz = { git = "https://github.com/sigp/ethereum_ssz", rev = "974f78f421fbf70cba4e8f84e0fa28c23ad54f34" }
+ethereum_ssz_derive = { git = "https://github.com/sigp/ethereum_ssz", rev = "974f78f421fbf70cba4e8f84e0fa28c23ad54f34" }
+tree_hash = { git = "https://github.com/sigp/tree_hash", rev = "e5ea1875edddf12438506c3751cbb313f9c52d08" }
+tree_hash_derive = { git = "https://github.com/sigp/tree_hash", rev = "e5ea1875edddf12438506c3751cbb313f9c52d08" }
