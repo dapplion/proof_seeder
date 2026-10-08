@@ -27,8 +27,9 @@ use axum::{
     response::IntoResponse,
     routing::post,
 };
-use bls::SecretKey;
+use bls::{PublicKeyBytes, SecretKey};
 use clap::Parser;
+use eth2::types::{StateId, ValidatorId};
 use eth2::{BeaconNodeHttpClient, Timeouts};
 use serde::Deserialize;
 use std::net::SocketAddr;
@@ -66,10 +67,6 @@ struct Config {
     /// Hex BLS key instead of a keystore. For devnets.
     #[arg(long)]
     secret_key: Option<String>,
-    /// Index of the validator whose key signs proofs. Must be in the registry, or the beacon node
-    /// rejects the proofs.
-    #[arg(long, default_value_t = 0)]
-    validator_index: u64,
 }
 
 struct Relay {
@@ -209,11 +206,12 @@ async fn serve(
     beacon_node: BeaconNodeHttpClient,
     genesis_validators_root: Hash256,
     secret_key: SecretKey,
+    validator_index: u64,
 ) {
     let listen_address = config.listen_address;
     let relay = Arc::new(Relay {
         secret_key,
-        validator_index: config.validator_index,
+        validator_index,
         beacon_node,
         genesis_validators_root,
         slots_per_epoch,
@@ -268,6 +266,21 @@ async fn main() {
             }
         }
     };
+    // A key that is not in the registry is a configuration error, not something to wait on.
+    let pubkey = PublicKeyBytes::from(secret_key.public_key());
+    let validator_index = loop {
+        match beacon_node
+            .get_beacon_states_validator_id(StateId::Head, &ValidatorId::PublicKey(pubkey))
+            .await
+        {
+            Ok(Some(response)) => break response.data.index,
+            Ok(None) => panic!("{pubkey:?} is not a validator on this beacon node"),
+            Err(e) => {
+                println!("waiting for the validator index from the beacon node: {e:?}");
+                tokio::time::sleep(RETRY).await;
+            }
+        }
+    };
 
     // A preset type is needed to check the config against its own constants, and nowhere else.
     let spec = match chain_config.preset_base.as_str() {
@@ -285,6 +298,7 @@ async fn main() {
         beacon_node,
         genesis_validators_root,
         secret_key,
+        validator_index,
     )
     .await
 }

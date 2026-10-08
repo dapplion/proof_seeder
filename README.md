@@ -4,7 +4,7 @@ Signs EIP-8025 execution proofs and submits them to a beacon node, so a proving 
 
 ```sh
 proof_seeder --beacon-node http://127.0.0.1:5052 \
-  --keystore keystore.json --keystore-password-file password --validator-index 7
+  --keystore keystore.json --keystore-password-file password
 ```
 
 A prover posts the proof and the facts that say what it is of:
