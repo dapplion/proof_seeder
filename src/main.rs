@@ -4,7 +4,7 @@
 //! identify what the proof is of:
 //!
 //! ```text
-//! POST /proofs?beacon_root=..&slot=..&proof_type=..
+//! POST /proofs?beacon_root=..&proof_type=..
 //! ```
 //!
 //! and this signs an `ExecutionProofEnvelope` over those and submits it to
@@ -29,7 +29,7 @@ use axum::{
 };
 use bls::{PublicKeyBytes, SecretKey};
 use clap::Parser;
-use eth2::types::{StateId, ValidatorId};
+use eth2::types::{BlockId, StateId, ValidatorId};
 use eth2::{BeaconNodeHttpClient, Timeouts};
 use serde::Deserialize;
 use std::net::SocketAddr;
@@ -83,24 +83,20 @@ struct Relay {
 struct ProofQuery {
     /// Beacon block the proof vouches for.
     beacon_root: String,
-    /// Slot of that block, which fixes the fork and so the signing domain.
-    slot: u64,
     proof_type: ProofType,
 }
 
 impl Relay {
     fn sign(
         &self,
-        query: &ProofQuery,
+        beacon_block_root: Hash256,
+        slot: Slot,
+        proof_type: ProofType,
         proof_data: ProofData,
-    ) -> Result<SignedExecutionProofEnvelope, String> {
-        let Some(beacon_block_root) = parse_root(&query.beacon_root) else {
-            return Err("beacon_root must be 32 byte hex".to_string());
-        };
-
+    ) -> SignedExecutionProofEnvelope {
         let fork_name = self
             .spec
-            .fork_name_at_epoch(Slot::new(query.slot).epoch(self.slots_per_epoch));
+            .fork_name_at_epoch(slot.epoch(self.slots_per_epoch));
         let domain = self.spec.compute_domain(
             Domain::ExecutionProof,
             self.spec.fork_version_for_name(fork_name),
@@ -109,16 +105,16 @@ impl Relay {
 
         let message = ExecutionProofEnvelope {
             proof_data,
-            proof_type: query.proof_type,
+            proof_type,
             beacon_block_root,
         };
         let signing_root = message.signing_root(domain);
 
-        Ok(SignedExecutionProofEnvelope {
+        SignedExecutionProofEnvelope {
             message,
             validator_index: self.validator_index,
             signature: self.secret_key.sign(signing_root),
-        })
+        }
     }
 }
 
@@ -135,10 +131,40 @@ async fn submit_proof(
         );
     };
 
+    let Some(beacon_block_root) = parse_root(&query.beacon_root) else {
+        return (
+            StatusCode::BAD_REQUEST,
+            "beacon_root must be 32 byte hex".to_string(),
+        );
+    };
+    let slot = match relay
+        .beacon_node
+        .get_beacon_headers_block_id(BlockId::Root(beacon_block_root))
+        .await
+    {
+        Ok(Some(header)) => header.data.header.message.slot,
+        Ok(None) => {
+            return (
+                StatusCode::NOT_FOUND,
+                format!("beacon node does not have block {beacon_block_root:?}"),
+            );
+        }
+        Err(e) => {
+            return (
+                StatusCode::BAD_GATEWAY,
+                format!("beacon node did not answer for the block: {e:?}"),
+            );
+        }
+    };
+
     let signing = relay.clone();
-    let signed = match tokio::task::spawn_blocking(move || signing.sign(&query, proof_data)).await {
-        Ok(Ok(signed)) => signed,
-        Ok(Err(e)) => return (StatusCode::BAD_REQUEST, e),
+    let proof_type = query.proof_type;
+    let signed = match tokio::task::spawn_blocking(move || {
+        signing.sign(beacon_block_root, slot, proof_type, proof_data)
+    })
+    .await
+    {
+        Ok(signed) => signed,
         Err(e) => {
             return (
                 StatusCode::INTERNAL_SERVER_ERROR,
