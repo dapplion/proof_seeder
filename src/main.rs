@@ -52,7 +52,7 @@ const RETRY: Duration = Duration::from_secs(4);
 )]
 struct Config {
     /// Address to listen on.
-    #[arg(long, default_value = "127.0.0.1:8025")]
+    #[arg(long, default_value = "127.0.0.1:8026")]
     listen_address: SocketAddr,
     /// Beacon node to submit proofs to.
     #[arg(long, default_value = "http://127.0.0.1:5052")]
