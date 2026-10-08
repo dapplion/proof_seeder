@@ -3,9 +3,12 @@
 Signs EIP-8025 execution proofs and submits them to a beacon node, so a proving service needs no validator key and speaks no SSZ.
 
 ```sh
+cargo install --locked --git https://github.com/dapplion/proof_seeder
 proof_seeder --beacon-node http://127.0.0.1:5052 \
   --keystore keystore.json --keystore-password-file password
 ```
+
+Listens on `127.0.0.1:8026`; `--listen-address` moves it.
 
 A prover posts the proof and the facts that say what it is of:
 
