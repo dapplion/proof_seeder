@@ -10,9 +10,11 @@ proof_seeder --beacon-node http://127.0.0.1:5052 \
 A prover posts the proof and the facts that say what it is of:
 
 ```
-POST /proofs?beacon_root=0x…&slot=1234&block_hash=0x…&parent_hash=0x…&proof_type=1
+POST /proofs?beacon_root=0x…&slot=1234&proof_type=1
 body: the raw proof
 ```
+
+The signed envelope commits to the proof, its type and the block, nothing else. The node derives the public input the proof is checked against from its own copy of the payload, so there is no execution block hash to pass here and no way to disagree with the node about one.
 
 `202` once the beacon node has it, `400` if the parameters are malformed, `413` if the proof is over `MAX_PROOF_SIZE`, `502` with the node's reason if it refused. `--help` has the flags.
 

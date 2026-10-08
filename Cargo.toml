@@ -16,10 +16,10 @@ tree_hash = { git = "https://github.com/sigp/tree_hash", rev = "e5ea1875edddf124
 
 # The containers, the signing domain and the beacon node client come from Lighthouse, so a proof
 # this signs hashes exactly as the node that verifies it expects. Pinned, not tracking a branch.
-bls = { git = "https://github.com/dapplion/lighthouse", rev = "a88ae8eb11d38c1653c3f6e433400f5fbde5bb52" }
-eth2 = { git = "https://github.com/dapplion/lighthouse", rev = "a88ae8eb11d38c1653c3f6e433400f5fbde5bb52" }
-eth2_keystore = { git = "https://github.com/dapplion/lighthouse", rev = "a88ae8eb11d38c1653c3f6e433400f5fbde5bb52" }
-types = { git = "https://github.com/dapplion/lighthouse", rev = "a88ae8eb11d38c1653c3f6e433400f5fbde5bb52" }
+bls = { git = "https://github.com/dapplion/lighthouse", rev = "b40713dd5eb6b7682b2f85f0087c240387a17de0" }
+eth2 = { git = "https://github.com/dapplion/lighthouse", rev = "b40713dd5eb6b7682b2f85f0087c240387a17de0" }
+eth2_keystore = { git = "https://github.com/dapplion/lighthouse", rev = "b40713dd5eb6b7682b2f85f0087c240387a17de0" }
+types = { git = "https://github.com/dapplion/lighthouse", rev = "b40713dd5eb6b7682b2f85f0087c240387a17de0" }
 
 # Lighthouse builds against forks of these, and a patch does not reach a consumer, so it is
 # repeated here. Drop it when those crates are published.

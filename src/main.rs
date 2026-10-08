@@ -4,11 +4,15 @@
 //! identify what the proof is of:
 //!
 //! ```text
-//! POST /proofs?beacon_root=..&slot=..&block_hash=..&parent_hash=..&proof_type=..
+//! POST /proofs?beacon_root=..&slot=..&proof_type=..
 //! ```
 //!
-//! and this signs an `ExecutionProof` over those and submits it to
-//! `POST /eth/v1/beacon/pool/execution_proofs`, which verifies and gossips it.
+//! and this signs an `ExecutionProofEnvelope` over those and submits it to
+//! `POST /eth/v1/beacon/execution_proofs`, which verifies and gossips it.
+//!
+//! The envelope commits only to the proof, its type and the block. The node derives the public
+//! input the proof is checked against from its own copy of the payload, so there is nothing about
+//! the execution block to sign here and nothing to disagree with it about.
 //!
 //! The prover supplies the chain facts rather than this resolving them, so there is nothing to
 //! cache, follow or expire here: the only state is the signing key. Whoever proved it, every proof
@@ -30,14 +34,12 @@ use serde::Deserialize;
 use std::net::SocketAddr;
 use std::sync::Arc;
 use std::time::Duration;
-use tree_hash::TreeHash;
 use types::execution::{
-    ExecutionProof, MAX_PROOF_SIZE, ProofData, ProofType, PublicInput, SignedExecutionProof,
-    ZkevmProof,
+    ExecutionProofEnvelope, MAX_PROOF_SIZE, ProofData, ProofType, SignedExecutionProofEnvelope,
 };
 use types::{
-    ChainSpec, ConfigAndPreset, Domain, ExecutionBlockHash, GnosisEthSpec, Hash256, MainnetEthSpec,
-    MinimalEthSpec, SigningData, Slot,
+    ChainSpec, ConfigAndPreset, Domain, GnosisEthSpec, Hash256, MainnetEthSpec, MinimalEthSpec,
+    SignedRoot, Slot,
 };
 
 /// How long to wait between attempts to reach the beacon node at startup.
@@ -86,8 +88,6 @@ struct ProofQuery {
     beacon_root: String,
     /// Slot of that block, which fixes the fork and so the signing domain.
     slot: u64,
-    block_hash: String,
-    parent_hash: String,
     proof_type: ProofType,
 }
 
@@ -96,13 +96,9 @@ impl Relay {
         &self,
         query: &ProofQuery,
         proof_data: ProofData,
-    ) -> Result<SignedExecutionProof, String> {
-        let (Some(beacon_root), Some(block_hash), Some(parent_hash)) = (
-            parse_root(&query.beacon_root),
-            parse_root(&query.block_hash).map(ExecutionBlockHash::from_root),
-            parse_root(&query.parent_hash).map(ExecutionBlockHash::from_root),
-        ) else {
-            return Err("beacon_root, block_hash and parent_hash must be 32 byte hex".to_string());
+    ) -> Result<SignedExecutionProofEnvelope, String> {
+        let Some(beacon_block_root) = parse_root(&query.beacon_root) else {
+            return Err("beacon_root must be 32 byte hex".to_string());
         };
 
         let fork_name = self
@@ -114,26 +110,16 @@ impl Relay {
             self.genesis_validators_root,
         );
 
-        let message = ExecutionProof {
-            beacon_root,
-            zk_proof: ZkevmProof {
-                proof_data,
-                proof_type: query.proof_type,
-                public_inputs: PublicInput {
-                    block_hash,
-                    parent_hash,
-                },
-            },
-            validator_index: self.validator_index,
+        let message = ExecutionProofEnvelope {
+            proof_data,
+            proof_type: query.proof_type,
+            beacon_block_root,
         };
-        let signing_root = SigningData {
-            object_root: message.tree_hash_root(),
-            domain,
-        }
-        .tree_hash_root();
+        let signing_root = message.signing_root(domain);
 
-        Ok(SignedExecutionProof {
+        Ok(SignedExecutionProofEnvelope {
             message,
+            validator_index: self.validator_index,
             signature: self.secret_key.sign(signing_root),
         })
     }
@@ -164,19 +150,16 @@ async fn submit_proof(
         }
     };
 
-    let (block_hash, proof_type) = (
-        signed.message.zk_proof.public_inputs.block_hash,
-        signed.message.zk_proof.proof_type,
-    );
+    let (beacon_block_root, proof_type) = (signed.beacon_block_root(), signed.proof_type());
     match relay
         .beacon_node
-        .post_beacon_pool_execution_proofs(vec![signed])
+        .post_beacon_execution_proofs(vec![signed])
         .await
     {
         Ok(()) => {
             println!(
                 "submitted proof of {:?} type {} ({} bytes)",
-                block_hash,
+                beacon_block_root,
                 proof_type,
                 body.len()
             );

@@ -46,7 +46,7 @@ dependencies = [
  "const-hex",
  "derive_more",
  "fixed-cache",
- "foldhash 0.2.0",
+ "foldhash",
  "getrandom 0.4.3",
  "hashbrown 0.17.1",
  "indexmap 2.14.2",
@@ -603,7 +603,7 @@ dependencies = [
 [[package]]
 name = "bls"
 version = "0.2.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "alloy-primitives",
  "blst",
@@ -659,7 +659,7 @@ dependencies = [
 [[package]]
 name = "builder_types"
 version = "0.1.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "bls",
  "context_deserialize",
@@ -923,6 +923,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "633458d4ef8c78b72454de2d54fd6ab2e60f9e02be22f3c6104cdc8a4e0fceb9"
 dependencies = [
  "unicode-segmentation",
+]
+
+[[package]]
+name = "core-foundation"
+version = "0.10.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b2a6cd9ae233e7f62ba4e9353e81a88df7fc8a5987b8d445b4d90c879bd156f6"
+dependencies = [
+ "core-foundation-sys",
+ "libc",
 ]
 
 [[package]]
@@ -1399,7 +1409,7 @@ dependencies = [
 [[package]]
 name = "eth2"
 version = "0.1.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "bls",
  "builder_types",
@@ -1423,7 +1433,7 @@ dependencies = [
 [[package]]
 name = "eth2_interop_keypairs"
 version = "0.2.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "bls",
  "ethereum_hashing",
@@ -1436,7 +1446,7 @@ dependencies = [
 [[package]]
 name = "eth2_key_derivation"
 version = "0.1.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "bls",
  "num-bigint-dig",
@@ -1448,7 +1458,7 @@ dependencies = [
 [[package]]
 name = "eth2_keystore"
 version = "0.1.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "aes",
  "bls",
@@ -1589,7 +1599,7 @@ dependencies = [
 [[package]]
 name = "fixed_bytes"
 version = "0.1.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "alloy-primitives",
  "safe_arith",
@@ -1614,12 +1624,6 @@ checksum = "3f9eec918d3f24069decb9af1554cad7c880e2da24a9afd88aca000531ab82c1"
 
 [[package]]
 name = "foldhash"
-version = "0.1.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d9c4f5dac5e15c24eb999c26181a6ca40b39fe946cbe4c263c7209467bc83af2"
-
-[[package]]
-name = "foldhash"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "77ce24cb58228fbb8aa041425bb1050850ac19177686ea6e0f41a70416f56fdb"
@@ -1627,7 +1631,7 @@ checksum = "77ce24cb58228fbb8aa041425bb1050850ac19177686ea6e0f41a70416f56fdb"
 [[package]]
 name = "fork_choice"
 version = "0.1.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "ethereum_ssz",
  "ethereum_ssz_derive",
@@ -1794,13 +1798,13 @@ checksum = "8a9ee70c43aaf417c914396645a0fa852624801b24ebb7ae78fe8272889ac888"
 
 [[package]]
 name = "hashbrown"
-version = "0.15.5"
+version = "0.16.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9229cfe53dfd69f0609a49f65461bd93001ea1ef889cd5529dd176593f5338a1"
+checksum = "841d1cc9bed7f9236f321df977030373f4a4163ae1a7dbfe1a51a2c1a51d9100"
 dependencies = [
  "allocator-api2",
  "equivalent",
- "foldhash 0.1.5",
+ "foldhash",
 ]
 
 [[package]]
@@ -1809,7 +1813,7 @@ version = "0.17.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ed5909b6e89a2db4456e54cd5f673791d7eca6732202bbf2a9cc504fe2f9b84a"
 dependencies = [
- "foldhash 0.2.0",
+ "foldhash",
  "serde",
  "serde_core",
 ]
@@ -1944,6 +1948,7 @@ dependencies = [
  "hyper",
  "hyper-util",
  "rustls",
+ "rustls-native-certs",
  "tokio",
  "tokio-rustls",
  "tower-service",
@@ -2163,7 +2168,7 @@ dependencies = [
 [[package]]
 name = "int_to_bytes"
 version = "0.2.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "bytes",
 ]
@@ -2339,7 +2344,7 @@ checksum = "a4933f3f57a8e9d9da04db23fb153356ecaf00cbd14aee46279c33dc80925c37"
 [[package]]
 name = "kzg"
 version = "0.1.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "educe",
  "ethereum_hashing",
@@ -2418,7 +2423,7 @@ checksum = "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6"
 [[package]]
 name = "logging"
 version = "0.2.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "chrono",
  "logroller",
@@ -2448,11 +2453,11 @@ dependencies = [
 
 [[package]]
 name = "lru"
-version = "0.13.0"
+version = "0.16.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "227748d55f2f0ab4735d87fd623798cb6b664512fe979705f829c9f81c934465"
+checksum = "7f66e8d5d03f609abc3a39e6f08e4164ebf1447a732906d39eb9b99b7919ef39"
 dependencies = [
- "hashbrown 0.15.5",
+ "hashbrown 0.16.1",
 ]
 
 [[package]]
@@ -2497,7 +2502,7 @@ checksum = "cf8baf1c55e62ffcace7a9f06f4bd9cd3f0c4beb022d3b367256b91b87513d98"
 [[package]]
 name = "merkle_proof"
 version = "0.2.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "alloy-primitives",
  "ethereum_hashing",
@@ -2531,7 +2536,7 @@ dependencies = [
 [[package]]
 name = "metrics"
 version = "0.2.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "prometheus",
 ]
@@ -2677,6 +2682,12 @@ name = "once_cell_polyfill"
 version = "1.70.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "384b8ab6d37215f3c5301a95a4accb5d64aa607f1fcb26a11b5303878451b4fe"
+
+[[package]]
+name = "openssl-probe"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7c87def4c32ab89d880effc9e097653c8da5d6ef28e6b539d313baaacfbafcbe"
 
 [[package]]
 name = "pairing"
@@ -2828,7 +2839,7 @@ dependencies = [
 [[package]]
 name = "pretty_reqwest_error"
 version = "0.1.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "reqwest",
  "sensitive_url",
@@ -2937,7 +2948,7 @@ dependencies = [
 [[package]]
 name = "proto_array"
 version = "0.2.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "ethereum_ssz",
  "ethereum_ssz_derive",
@@ -3249,6 +3260,7 @@ dependencies = [
  "pin-project-lite",
  "quinn",
  "rustls",
+ "rustls-native-certs",
  "rustls-pki-types",
  "serde",
  "serde_json",
@@ -3434,6 +3446,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "rustls-native-certs"
+version = "0.8.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dab5152771c58876a2146916e53e35057e1a4dfa2b9df0f0305b07f611fdea4d"
+dependencies = [
+ "openssl-probe",
+ "rustls-pki-types",
+ "schannel",
+ "security-framework",
+]
+
+[[package]]
 name = "rustls-pki-types"
 version = "1.15.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3479,6 +3503,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97a22f5af31f73a954c10289c93e8a50cc23d971e80ee446f1f6f7137a088213"
 dependencies = [
  "cipher",
+]
+
+[[package]]
+name = "schannel"
+version = "0.1.29"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "91c1b7e4904c873ef0710c1f407dde2e6287de2bebc1bbbf7d430bb7cbffd939"
+dependencies = [
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
@@ -3554,6 +3587,29 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dcb913707158fadaf0d8702c2db0e857de66eb003ccfdda5924b5f5ac98efb38"
 dependencies = [
  "cc",
+]
+
+[[package]]
+name = "security-framework"
+version = "3.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b7f4bc775c73d9a02cde8bf7b2ec4c9d12743edf609006c7facc23998404cd1d"
+dependencies = [
+ "bitflags 2.13.2",
+ "core-foundation",
+ "core-foundation-sys",
+ "libc",
+ "security-framework-sys",
+]
+
+[[package]]
+name = "security-framework-sys"
+version = "2.17.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6ce2691df843ecc5d231c0b14ece2acc3efb62c0a398c7e1d875f3983ce020e3"
+dependencies = [
+ "core-foundation-sys",
+ "libc",
 ]
 
 [[package]]
@@ -3827,7 +3883,7 @@ checksum = "6ce2be8dc25455e1f91df71bfa12ad37d7af1092ae736f3a6cd0e37bc7810596"
 [[package]]
 name = "state_processing"
 version = "0.2.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "bls",
  "educe",
@@ -3889,7 +3945,7 @@ dependencies = [
 [[package]]
 name = "swap_or_not_shuffle"
 version = "0.2.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "alloy-primitives",
  "ethereum_hashing",
@@ -4340,7 +4396,7 @@ checksum = "b6f5e870be6c3b371b77fe0ee0bafb859fa4964b4404c27de1d380043c4dda20"
 [[package]]
 name = "types"
 version = "0.2.1"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "alloy-primitives",
  "alloy-rlp",
@@ -4785,7 +4841,7 @@ checksum = "1ebf944e87a7c253233ad6766e082e3cd714b5d03812acc24c318f549614536e"
 [[package]]
 name = "workspace_members"
 version = "0.1.0"
-source = "git+https://github.com/dapplion/lighthouse?rev=a88ae8eb11d38c1653c3f6e433400f5fbde5bb52#a88ae8eb11d38c1653c3f6e433400f5fbde5bb52"
+source = "git+https://github.com/dapplion/lighthouse?rev=b40713dd5eb6b7682b2f85f0087c240387a17de0#b40713dd5eb6b7682b2f85f0087c240387a17de0"
 dependencies = [
  "cargo_metadata",
  "quote",
